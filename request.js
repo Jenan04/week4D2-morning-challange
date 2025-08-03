@@ -1,9 +1,9 @@
-var request = (function () {
-  function _request (method, url, payload, cb) {
-    var xhr = new XMLHttpRequest();
-    var payloadString = JSON.stringify(payload);
+const request = (function () {
+  const _request = (method, url, payload, cb) => {
+    const xhr = new XMLHttpRequest();
+    // var payloadString = JSON.stringify(payload);
 
-    xhr.onreadystatechange = function () {
+    xhr.onreadystatechange = () => {
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
           cb(null, JSON.parse(xhr.responseText));
@@ -14,18 +14,24 @@ var request = (function () {
     };
     xhr.open(method, url);
     xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.send(payloadString);
+    // 
+    if (payload) {
+      xhr.send(JSON.stringify(payload));
+    } else {
+      xhr.send();
+    }
+  
   };
 
-  var get = function (url, cb) { _request('GET', url, null, cb); }
-  var post = function (url, payload, cb) { _request('POST', url, payload, cb); }
-  var put = function (url, payload, cb) { _request('PUT', url, payload, cb); }
-  var del = function (url, cb) { _request('DELETE', url, null, cb); }
+  const get = function (url, cb) { _request('GET', url, null, cb); }
+  const post = function (url, payload, cb) { _request('POST', url, payload, cb); }
+  const put = function (url, payload, cb) { _request('PUT', url, payload, cb); }
+  const del = function (url, cb) { _request('DELETE', url, null, cb); }
 
-  return request = {
-    get: get,
-    post: post,
-    put: put,
-    del: del
+  return  {
+     get,
+     post,
+     put,
+     del
   };
 })();
